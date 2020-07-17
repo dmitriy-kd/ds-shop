@@ -87,9 +87,9 @@ class User extends ActiveRecord implements IdentityInterface
      * @param string $username
      * @return static|null
      */
-    public static function findByEmail($email)
+    public static function findUsername($username)
     {
-        return static::findOne(['email' => $email, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
@@ -216,143 +216,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
-    /* моя реализация
-    public function getNickname($id)
-    {
-
-    	if ($this->nickname != null) {
-
-    		return $this->nickname;
-
-    	}
-
-    	return $id;
-
-    }
-    */
-    /*
-	@return mixed
-    */
-    public function getNickname()
-    {
-
-    	return ($this->nickname) ? $this->nickname : $this->getId();
-
-    }
-	/*
-    public function save()
-    {
-
-    	$sql = "INSERT INTO user (id, username, email, about, nickname, auth_key, password_hash, created_at, updated_at) VALUES (null, '{$this->username}', '{$this->email}', '{$this->about}', '{$this->nickname}', '{$this->auth_key}', '{$this->password_hash}', '{$this->created_at}', '{$this->updated_at}')";
-
-    	return Yii::$app->db->createCommand($sql)->execute();
-
-    }
-    */
-
-    public function followUser(User $user)
-    {
-
-    	$redis = Yii::$app->redis;
-    	$redis->sadd("user:{$this->getId()}:subscriptions", $user->getId());
-    	$redis->sadd("user:{$user->getId()}:followers", $this->getId());
-
-    }
-
-    public function unfollowUser(User $user)
-    {
-
-    	$redis = Yii::$app->redis;
-    	$redis->srem("user:{$this->getId()}:subscriptions", $user->getId());
-    	$redis->srem("user:{$user->getId()}:followers", $this->getId());
-
-    }
-
-    public function getSubscriptions()
-    {
-
-    	$redis = Yii::$app->redis;
-    	$key = "user:{$this->getId()}:subscriptions";
-    	$ids = $redis->smembers($key);
-    	return User::find()->select('id, username, nickname')->where(['id' => $ids])->orderBy('username')->asArray()->all();
-
-    }
-
-    public function getFollowers()
-    {
-
-    	$redis = Yii::$app->redis;
-    	$key = "user:{$this->getId()}:followers";
-    	$ids = $redis->smembers($key);
-    	return User::find()->select('id, username, nickname')->where(['id' => $ids])->orderBy('username')->asArray()->all();
-
-    }
-
-    public function countSubscriptions()
-    {
-
-    	$redis = Yii::$app->redis;
-    	return $redis->scard("user:{$this->getId()}:subscriptions");
-
-    }
-
-    public function countFollowers()
-    {
-
-    	$redis = Yii::$app->redis;
-    	return $redis->scard("user:{$this->getId()}:followers");
-
-    }
-
-    public function getMutualSubscriptionsTo(User $user)
-    {
-
-    	// Current user subscriptions
-    	$key1 = "user:{$this->getId()}:subscriptions";
-    	// Given user followers
-    	$key2 = "user:{$user->getId()}:followers";
-
-    	/* @var $redis Connection */
-    	$redis = Yii::$app->redis;
-
-    	$ids = $redis->sinter($key1, $key2);
-
-    	return User::find()->select('id, username, nickname')->where(['id' => $ids])->orderBy('username')->asArray()->all();
-
-    }
-
-    public function isFollowing(User $user)
-    {
-
-    	$redis = Yii::$app->redis;
-
-    	return (bool) $redis->sismember("user:{$this->getId()}:subscriptions", $user->getId());
-
-    }
-
-    public function getPicture()
-    {
-
-    	if ($this->picture) {
-
-    		return Yii::$app->storage->getFile($this->picture);
-
-    	}
-
-    	return self::DEFAULT_IMAGE;
-
-    }
-
-    public function deletePicture($id)
-    {
-
-    	$user = self::find()->where(['id' => $id])->one();
-
-    	$user->picture = null;
-
-    	return $user->save();
-
-    }
 
     public static function getUsername($id)
     {
@@ -360,41 +223,6 @@ class User extends ActiveRecord implements IdentityInterface
         $user = static::findOne(['id' => $id]);
         return $user->username;
 
-    }
-
-    public function getFeed(int $limit)
-    {
-
-        $order = ['post_created_at' => SORT_DESC];
-        return $this->hasMany(Feed::className(), ['user_id' => 'id'])->orderBy($order)->limit($limit)->all();
-
-    }
-
-    public function likesPost(int $postId)
-    {
-
-        $redis = Yii::$app->redis;
-        return (bool) $redis->sismember("user:{$this->getId()}:likes", $postId);
-
-    }
-
-    /**
-     * Get post count
-     * @return integer
-     */
-    public function getPostCount()
-    {
-        return $this->hasMany(Post::className(), ['user_id' => 'id'])->count();
-    }
-
-    /**
-     * Get post count
-     * @return Post[]
-     */
-    public function getPosts()
-    {
-        $order = ['created_at' => SORT_DESC];
-        return $this->hasMany(Post::className(), ['user_id' => 'id'])->orderBy($order)->all();
     }
 
 
