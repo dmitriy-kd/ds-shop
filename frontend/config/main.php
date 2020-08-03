@@ -10,15 +10,28 @@ return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    'language' => 'ru-Ru',
     'controllerNamespace' => 'frontend\controllers',
     'modules' => [
         'user' => [
             'class' => 'frontend\modules\user\Module',
         ],
+        'product' => [
+        	'class' => 'frontend\modules\product\Module',
+        ],
+        'order' => [
+        	'class' => 'frontend\modules\order\Module',
+        ],
+        'sale' => [
+        	'class' => 'frontend\modules\sale\Module',
+        ],
     ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
+        ],
+        'storage' => [
+            'class' => 'frontend\components\Storage',
         ],
         'user' => [
             'identityClass' => 'frontend\models\User',

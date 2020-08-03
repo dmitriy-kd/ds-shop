@@ -70,6 +70,13 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+
+        if (Yii::$app->user->isGuest) {
+
+            return $this->redirect(['/user/default/login']);
+
+        }
+
         return $this->render('index');
     }
 

@@ -1,0 +1,91 @@
+<?php
+
+use yii\helpers\Html;
+use yii\grid\GridView;
+use yii\web\JqueryAsset;
+
+/* @var $this yii\web\View */
+/* @var $dataProvider yii\data\ActiveDataProvider */
+
+$this->title = 'Товары';
+$this->params['breadcrumbs'][] = $this->title;
+?>
+<div class="products-index">
+
+    <h1><?= Html::encode($this->title) ?></h1>
+
+    <p style="display:inline-block;">
+        <?= Html::a('Добавить товар', ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
+    <div class="form-group">
+        <div class="input-group">
+            <span class="input-group-addon">Поиск по наименованию и штрихкоду:</span>
+            <input type="text" name="search-text" id="search-text" class="form-control">
+        </div>
+    </div>
+
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            [
+                'attribute' => 'id',
+                'format' => 'raw',
+                'value' => function($products) {
+                    /* @var $post \backend\models\Post*/
+                    return Html::a($products->id, ['view', 'id' => $products->id]);
+                },
+            ],
+            [
+                'attribute' => 'name',
+                'label' => 'Наименование',
+                'format' => 'raw',
+            ],
+            [
+                'attribute' => 'picture',
+                'label' => 'Картинка',
+                'format' => 'raw',
+                'value' => function($products) {
+                    /* @var $post \backend\models\Post */
+                    return Html::img($products->getImage(), ['width' => '130px']);
+                },
+            ],
+            [
+                'attribute' => 'startPrice',
+                'label' => 'Закупочная цена',
+                'format' => 'raw',
+            ],
+            [
+                'attribute' => 'finishPrice',
+                'label' => 'Розничная цена',
+                'format' => 'raw',
+            ],
+            [
+                'attribute' => 'leftovers',
+                'label' => 'Остаток',
+                'format' => 'raw',
+            ],
+            [
+                'attribute' => 'barcode',
+                'label' => 'Штрихкод',
+                'format' => 'raw',
+            ],
+
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' =>  '{view}&nbsp;&nbsp;&nbsp;{update}&nbsp;&nbsp;&nbsp;{delete}',
+            ],
+        ],
+    ]); ?>
+
+
+</div>
+<div id="search-result">
+    
+</div>
+
+<?php $this->registerJsFile('@web/js/search/search.js', [
+        'depends' => JqueryAsset::className()
+    ]); 
+?>

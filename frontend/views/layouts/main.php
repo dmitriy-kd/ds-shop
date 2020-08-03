@@ -39,9 +39,12 @@ AppAsset::register($this);
         ['label' => 'Главная', 'url' => ['/site/index']],
     ];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Зарегистрироваться', 'url' => ['/user/default/signup']];
         $menuItems[] = ['label' => 'Войти', 'url' => ['/user/default/login']];
     } else {
+    	$menuItems[] = ['label' => 'Заказы', 'url' => ['/order/manage/index']];
+    	$menuItems[] = ['label' => 'Товары', 'url' => ['/product/manage/index']];
+    	$menuItems[] = ['label' => 'Продажи', 'url' => ['/sale/manage/index']];
+    	$menuItems[] = ['label' => 'Зарегистрировать нового пользователя', 'url' => ['/user/default/signup']];
         $menuItems[] = '<li>'
             . Html::beginForm(['/user/default/logout'], 'post')
             . Html::submitButton(
