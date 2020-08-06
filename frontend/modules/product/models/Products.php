@@ -74,4 +74,11 @@ class Products extends \yii\db\ActiveRecord
     	return $this->picture = $file;
 
     }
+
+    public static function getLeftoversZero()
+    {
+
+        return self::find()->where(['leftovers' => 0])->all();
+
+    }
 }

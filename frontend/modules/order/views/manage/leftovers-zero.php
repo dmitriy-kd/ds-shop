@@ -1,31 +1,22 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
 use yii\web\JqueryAsset;
+use yii\helpers\Url;
+use frontend\modules\order\models\Cart;
 
-/* @var $this yii\web\View */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-
-$this->title = 'Товары';
+$this->title = 'Товары с нулевым остатком';
+$this->params['breadcrumbs'][] = ['label' => 'Создать заказ', 'url' => ['create']];
 $this->params['breadcrumbs'][] = $this->title;
-?>
-<div class="products-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+?>
+<div class="orders-create">
 
     <p style="display:inline-block;">
-        <?= Html::a('Добавить товар', ['create'], ['class' => 'btn btn-success']) ?>
+        <a href="/order/cart/index" class="btn btn-success">Список&nbsp;<span class="glyphicon glyphicon-list-alt"></span>&nbsp;&nbsp;(<span id="order-count"><?php echo Cart::countItems(); ?></span>)</a>    
     </p>
 
-    <div class="form-group">
-        <div class="input-group">
-            <span class="input-group-addon">Поиск по наименованию и штрихкоду:</span>
-            <input type="text" name="search-text" id="search-text" class="form-control">
-        </div>
-    </div>
-
-    <div>
+	<div>
         <table class="table table-striped table-bordered">
             <thead>
                 <tr>
@@ -41,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </tr>
             </thead>
             <tbody class="search-result">
-                <?php foreach($products as $product): ?>
+                <?php foreach($leftoversZero as $product): ?>
                     <tr data-key="<?php echo $product->id; ?>">
                         <td><?php echo $product->id; ?></td>
                         <td><a href="/product/manage/view?id=<?php echo $product->id; ?>"><?php echo $product->id; ?></a></td>
@@ -52,25 +43,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         <td><?php echo $product->leftovers; ?></td>
                         <td><?php echo $product->barcode; ?></td>
                         <td>
-                            <a href="/product/manage/view?id=<?php echo $product->id; ?>" title="Просмотр" aria-label="View" data-pjax="0"><span class="glyphicon glyphicon-eye-open"></span></a>&nbsp;&nbsp;&nbsp;
-                            <a href="/product/manage/update?id=<?php echo $product->id; ?>" title="Изменить" aria-label="Update" data-pjax="0"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;&nbsp;&nbsp;
-                            <a href="/product/manage/delete?id=<?php echo $product->id; ?>" title="Удалить" aria-label="Delete" data-pjax="0" data-confirm="Вы уверены что хотите удалить данный товар?" data-method="post"><span class="glyphicon glyphicon-trash"></span></a>
+                            &nbsp;&nbsp;<a href="#" data-id="<?php echo $product->id; ?>" class="add-to-order" title="Добавить в заказ" aria-label="View" data-pjax="0"><span class="glyphicon glyphicon-plus"></span></a>&nbsp;&nbsp;
                         </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
     </div>
-    <div>
-        <table class="table-search">
-        
-        </table>
-    </div>
-
-
 </div>
-
-<?php $this->registerJsFile('@web/js/search/search.js', [
+<?php 
+    $this->registerJsFile('@web/js/order/addToOrder.js', [
         'depends' => JqueryAsset::className()
     ]); 
 ?>

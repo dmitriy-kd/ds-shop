@@ -17,6 +17,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <p style="display:inline-block;">
         <a href="/order/cart/index" class="btn btn-success">Список&nbsp;<span class="glyphicon glyphicon-list-alt"></span>&nbsp;&nbsp;(<span id="order-count"><?php echo Cart::countItems(); ?></span>)</a>    
     </p>
+    <p style="display:inline-block;">
+        <?= Html::a('Товары с нулевым остатком', ['leftovers-zero'], ['class' => 'btn btn-default']) ?>
+    </p>
 
     <div class="form-group">
         <div class="input-group">
@@ -52,7 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <td><?php echo $product->leftovers; ?></td>
                         <td><?php echo $product->barcode; ?></td>
                         <td>
-                            &nbsp;&nbsp;<a href="#" data-id="<?php echo $product->id; ?>" class="add-to-order" title="View" aria-label="View" data-pjax="0"><span class="glyphicon glyphicon-plus"></span></a>&nbsp;&nbsp;
+                            &nbsp;&nbsp;<a href="#" data-id="<?php echo $product->id; ?>" class="add-to-order" title="Добавить в заказ" aria-label="View" data-pjax="0"><span class="glyphicon glyphicon-plus"></span></a>&nbsp;&nbsp;
                         </td>
                     </tr>
                 <?php endforeach; ?>
