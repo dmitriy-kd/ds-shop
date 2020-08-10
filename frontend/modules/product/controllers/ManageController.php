@@ -63,7 +63,7 @@ class ManageController extends Controller
      * Lists all Products models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($sort = 'DESC')
     {
         /*
         $dataProvider = new ActiveDataProvider([
@@ -71,10 +71,11 @@ class ManageController extends Controller
         ]);
         */
         
-        $products = Products::find()->all();
+        $products = Products::find()->orderBy('leftovers ' . $sort)->all();
 
         return $this->render('index', [
             'products' => $products,
+            'sort' => $sort,
         ]);
     }
 

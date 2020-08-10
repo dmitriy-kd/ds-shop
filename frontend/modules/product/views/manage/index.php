@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\web\JqueryAsset;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -35,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <th><a href="/product/manage/index?sort=picture" data-sort="picture">Картинка</a></th>
                     <th><a href="/product/manage/index?sort=startPrice" data-sort="startPrice">Закупочная цена</a></th>
                     <th><a href="/product/manage/index?sort=finishPrice" data-sort="finishPrice">Розничная цена</a></th>
-                    <th><a href="/product/manage/index?sort=leftovers" data-sort="leftovers">Остаток</a></th>
+                    <th><a href="/product/manage/index?sort=leftovers" data-sort="leftovers">Остаток&nbsp;<a href="<?php echo Url::to(['/product/manage/index', 'sort' => ($sort == "DESC") ? "ASC" : "DESC"]);?>"><span class="glyphicon glyphicon-sort"></span></a></a></th>
                     <th><a href="/product/manage/index?sort=barcode" data-sort="barcode">Штрихкод</a></th>
                     <th class="action-column">&nbsp;</th>
                 </tr>

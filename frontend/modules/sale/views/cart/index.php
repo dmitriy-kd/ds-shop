@@ -7,7 +7,7 @@
                         <div class="features_items"><!--features_items-->
 						
                             <h2 class="title text-center">Корзина</h2>
-							<?php if($_SESSION['productInfo0']): ?>
+							<?php if(isset($_SESSION['productInfo0'])): ?>
 							<p>Вы выбрали следующие товары:</p>
 							<table class="table-bordered table-striped table">
 								<tr>

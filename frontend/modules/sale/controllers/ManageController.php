@@ -55,7 +55,6 @@ class ManageController extends Controller
         return $this->render('index', [
             'productsName' => $productsName,
             'sales' => $sales,
-            'sort' => $sort,
             
         ]);
     }
